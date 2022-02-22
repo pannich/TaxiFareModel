@@ -31,7 +31,7 @@ class Trainer():
         self.y = y
         self.experiment_name = EXPERIMENT_NAME
 
-    def set_pipeline(self):
+    def set_pipeline(self,model):
         """defines the pipeline as a class attribute"""
         '''returns a pipelined model'''
         dist_pipe = Pipeline([
@@ -48,15 +48,24 @@ class Trainer():
         ], remainder="drop")
         pipe = Pipeline([
             ('preproc', preproc_pipe),
-            ('linear_model', LinearRegression())
+            ('model', model)  ##add model variable here instead of hard coding LinearRegression()
         ])
         self.pipeline = pipe #no need to return anything just store pipeline in the background
 
 
     def run(self):
         """set and train the pipeline"""
-        self.set_pipeline() #running the function set_pipeline() and sotre self.pipeline
-        #self.mlflow_log_param
+        model_params = dict(
+            n_estimators=100,
+            max_depth=1)
+
+        model = RandomForestRegressor() ##can change to LinearRegressor() or RandomForestRegressor() or other estimators
+        model.set_params(**model_params)
+
+        self.set_pipeline(model) #running the function set_pipeline() and sotre self.pipeline
+        self.mlflow_log_metric("rmse", 4.9)
+        self.mlflow_log_param("model", model)
+
         '''returns a trained pipelined model'''
         self.pipeline.fit(self.X, self.y)
 
@@ -109,11 +118,10 @@ if __name__ == "__main__":
     # evaluate
     rmse = trainer.evaluate(X_val,y_val)
     print(rmse)
-    #client = trainer.mlflow_client()
-    trainer.mlflow_log_metric("rmse", 4.5)
-    trainer.mlflow_log_param("model", "linear")
-    trainer.mlflow_log_metric("rmse", 5.2)
-    trainer.mlflow_log_param("model", "Randomforest")
+
+    experiment_id = trainer.mlflow_experiment_id
+    print(f"experiment URL: https://mlflow.lewagon.co/#/experiments/{experiment_id}")
+
 
 
 # for model in ["linear", "Randomforest"]:
