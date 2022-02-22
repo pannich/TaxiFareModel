@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/nichada/code/pannich/TaxiFareModel/mlruns/1/0f73488929dd4b07b73b5600265b08a1/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: 0f73488929dd4b07b73b5600265b08a1
+run_uuid: 0f73488929dd4b07b73b5600265b08a1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1645542870285
+status: 1
+tags: []
+user_id: unknown
